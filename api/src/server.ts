@@ -1,5 +1,6 @@
 import fastify from "fastify";
 
+import { fastifyCors } from "@fastify/cors";
 import fastifySwagger from "@fastify/swagger";
 
 import fastifySwaggerUi from "@fastify/swagger-ui";
@@ -14,6 +15,10 @@ import { registerForEvent } from "./routes/register-for-event";
 
 
 const app = fastify();
+
+app.register(fastifyCors, {
+  origin: "*"
+});
 
 app.register(fastifySwagger, {
   swagger: {
@@ -44,6 +49,6 @@ app.register(checkIn);
 
 app.setErrorHandler(errorhandler);
 
-app.listen({ port: 3333 }).then(() => {
+app.listen({ port: 3333, host: '0.0.0.0' }).then(() => {
   console.log("Server is running on port 3333");
 })
