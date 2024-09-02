@@ -15,6 +15,8 @@ export async function createEvent(app: FastifyInstance) {
     "/events",
     {
       schema: {
+        summary: "Create a new event",
+        tags: ['Events'],
         body: EVENT_SCHEMA,
         response: {
           201: z.object({
