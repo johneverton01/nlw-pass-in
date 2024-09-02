@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { prisma } from '../lib/prisma';
+import { BadRequestError } from "./_errors/bad-request";
 
 export async function checkIn(app: FastifyInstance) {
   app
@@ -16,9 +17,6 @@ export async function checkIn(app: FastifyInstance) {
         response: {
           201: z.object({
             message: z.string()
-          }),
-          409: z.object({
-            message: z.string()
           })
         }
       }
@@ -31,9 +29,7 @@ export async function checkIn(app: FastifyInstance) {
       });
 
       if (attendeeCheckIn) {
-        return reply.status(409).send({
-          message: 'Attendee already checked in!'
-        });
+        throw new BadRequestError('Attendee already checked in');
       }
 
       await prisma.checkIn.create({
